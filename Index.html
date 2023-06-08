@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chrome Dinosaur Game</title>
+    <style>
+        #game-container {
+            width: 100%;
+            height: 400px;
+            background-color: #f8f8f8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #dinosaur {
+            width: 50px;
+            height: 50px;
+            background-color: #000;
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+        }
+
+        #obstacle {
+            width: 20px;
+            height: 50px;
+            background-color: #f00;
+            position: absolute;
+            bottom: 0;
+            right: 10%;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="dinosaur"></div>
+        <div id="obstacle"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dinosaur = document.getElementById('dinosaur');
+            const obstacle = document.getElementById('obstacle');
+            let gameSpeed = 10;
+
+            function jump() {
+                if (dinosaur.classList.contains('jump')) return;
+                dinosaur.classList.add('jump');
+                setTimeout(() => {
+                    dinosaur.classList.remove('jump');
+                }, 500);
+            }
+
+            document.addEventListener('keydown', (event) => {
+                if (event.code === 'Space') {
+                    jump();
+                }
+            });
+
+            function gameLoop() {
+                let obstaclePosition = 1000;
+
+                function moveObstacle() {
+                    if (obstaclePosition === -20) {
+                        obstaclePosition = 1000;
+                        gameSpeed += 1;
+                    }
+
+                    obstaclePosition -= gameSpeed;
+                    obstacle.style.right = `${obstaclePosition}px`;
+
+                    if (obstaclePosition < 50 && obstaclePosition > 0 && dinosaur.classList.contains('jump')) {
+                        alert('Game Over!');
+                        location.reload();
+                    }
+                }
+
+                setInterval(moveObstacle, 20);
+            }
+
+            gameLoop();
+        });
+    </script>
+</body>
+</html>
